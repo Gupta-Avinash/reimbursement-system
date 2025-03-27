@@ -1,0 +1,39 @@
+version: "3"
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb_reimbursements
+    ports:
+      - "27017:27017" # Optional: expose port to host
+    networks:
+      - reimbursement-network
+    volumes:
+      - mongo-data:/data/db
+
+  reimbursement-app-backend:
+    build:
+      context: ./reimbursement system # Directory where Dockerfile is located
+    container_name: reimbursements-node-backend
+    ports:
+      - "7000:7000"
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/reimbursement # MongoDB connection string
+    networks:
+      - reimbursement-network
+
+  reimbursement-app-frontend:
+    build:
+      context: ./frontend/reimbursement system/frontend/reimbursement frontend
+    container_name: reimbursements-react-frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - reimbursement-network
+
+volumes:
+  mongo-data:
+    driver: local
+
+networks:
+  reimbursement-network:
+    driver: bridge
